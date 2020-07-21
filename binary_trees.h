@@ -56,5 +56,8 @@ int binary_tree_is_complete(const binary_tree_t *tree);
 void comp_check(const binary_tree_t *tree, int *hitleaf, size_t level);
 binary_tree_t *binary_tree_rotate_left(binary_tree_t *tree);
 binary_tree_t *binary_tree_rotate_right(binary_tree_t *tree);
+int binary_tree_is_bst(const binary_tree_t *tree);
+int isleft(const binary_tree_t *tree, int num);
+int isright(const binary_tree_t *tree, int num);
 
 #endif
