@@ -38,7 +38,7 @@ bst_t *bst_remove(bst_t *root, int value)
 	{
 		successor = io_successor(todel->right);
 /*		printf("print successor: %i\n", successor->n);*/
-		binary_tree_print(successor);
+/*		binary_tree_print(successor);*/
 		todel->n = successor->n;
 		if (root == todel)
 		{
