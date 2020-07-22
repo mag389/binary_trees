@@ -66,4 +66,6 @@ bst_t *bst_remove(bst_t *root, int value);
 bst_t *io_successor(bst_t *root);
 bst_t *twokids(bst_t *root, bst_t *todel, bst_t *successor);
 
+int binary_tree_is_avl(const binary_tree_t *tree);
+
 #endif
