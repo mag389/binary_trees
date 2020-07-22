@@ -1,8 +1,9 @@
 #include "binary_trees.h"
 int binary_tree_balance(const binary_tree_t *tree);
 size_t binary_tree_height(const binary_tree_t *tree);
+int isrange(const binary_tree_t *tree, int num, int side);
 /**
-* int binary_tree_is_avl - determines if the tree is an avl tree
+* binary_tree_is_avl - determines if the tree is an avl tree
 * Return: 1 for an avl tree else o
 * @tree: the tree to test
 */
@@ -42,7 +43,7 @@ int binary_tree_is_bst(const binary_tree_t *tree)
 		return (0);
 	if (!(tree->left) && !(tree->right))
 		return (1);
-	if (isleft(tree->left, tree->n) && isright(tree->right, tree->n))
+	if (isrange(tree->left, tree->n, 0) && isrange(tree->right, tree->n, 1))
 	{
 		if (tree->left)
 			left = binary_tree_is_bst(tree->left);
@@ -53,32 +54,25 @@ int binary_tree_is_bst(const binary_tree_t *tree)
 	return (0);
 }
 /**
-* isleft - tests if the left side is < the root
+* isrange - tests if the left side is < the root
 * Return: 1 for valid else 0
 * @tree: the tree to check comparison for
 * @num: the number to compare against
+* @side: which side of the binary tree is being checked 0 for left 1 for right
 */
-int isleft(const binary_tree_t *tree, int num)
+int isrange(const binary_tree_t *tree, int num, int side)
 {
 	if (!tree)
 		return (1);
-	if (tree->n >= num)
-		return (0);
-	return (isleft(tree->left, num) && isleft(tree->right, num));
-}
-/**
-* isright - tests if the left side is < the root
-* Return: 1 for valid else 0
-* @tree: the tree to check comparison for
-* @num: the number to compare against
-*/
-int isright(const binary_tree_t *tree, int num)
-{
-	if (!tree)
-		return (1);
+	if (side == 0)
+	{
+		if (tree->n >= num)
+			return (0);
+		return (isrange(tree->left, num, 0) && isrange(tree->right, num, 0));
+	}
 	if (tree->n <= num)
 		return (0);
-	return (isright(tree->left, num) && isright(tree->right, num));
+	return (isrange(tree->left, num, 1) && isrange(tree->right, num, 1));
 }
 /**
 * binary_tree_balance - finds balance of the binary tree
