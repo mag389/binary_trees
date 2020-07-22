@@ -1,5 +1,5 @@
 #include "binary_trees.h"
-
+bst_t *remove_onekid(bst_t *todel);
 /**
 * bst_remove - removes a node value from the tree
 * Return: pointer to new root node of the tree
@@ -10,37 +10,56 @@ bst_t *bst_remove(bst_t *root, int value)
 {
 	bst_t *todel, *successor;
 
+	printf("into the function\n");
+	if (!root)
+		return (NULL);
+	printf("past root nullchekc\n");
 	todel = bst_search(root, value);
 	if (!todel)
 		return (NULL);
+	printf("past nullchecks\n");
+	if (!(todel->right) && !(todel->left))
+	{
+		printf("into oduble null if\n");
+		if (todel->parent && todel->parent->right == todel)
+			todel->parent->right = NULL;
+		if (todel->parent && todel->parent->left == todel)
+			todel->parent->left = NULL;
+		if (todel == root)
+		{
+			free(todel);
+			return (NULL);
+		}
+		free(todel);
+		return (root);
+	}
+	printf("past the no child if\n");
 	if (todel->right && todel->left)
 	{
 		successor = io_successor(todel->right);
-		return (twokids(root, todel, successor));
-/*
-*		if (successor)
-*		{
-*			printf("successor is %i\n", successor->n);
-*			successor->parent->left = successor->right;
-*			successor->right = successor->parent;
-*			successor->parent = todel->parent;
-*			successor->left = todel->left;
-*			successor->left->parent = successor;
-*			successor->right->parent = successor;
-*			printf("i know where the seg faults\n");
-*		}
-*/
+		printf("print successor: %i\n", successor->n);
+		binary_tree_print(successor);
+		todel->n = successor->n;
+		if (root == todel)
+		{
+			printf("root is todel\n");
+			remove_onekid(successor);
+			return (root);
+		}
+		remove_onekid(successor);
+		return (root);
 	}
-	else if (todel->right)
-		{
+/* remove the one child node */
+	if (todel == root)
+		return (remove_onekid(todel));
+	remove_onekid(todel);
+	return (root);
+/* older stuff below */
+	if (todel->right)
 		successor = todel->right;
-		successor->parent = todel->parent;
-		}
 	else
-		{
 		successor = todel->left;
-		successor->parent = todel->parent;
-		}
+	successor->parent = todel->parent;
 	if (successor->parent)
 	{
 		if (successor->parent->left == todel)
@@ -48,7 +67,6 @@ bst_t *bst_remove(bst_t *root, int value)
 		else
 			successor->parent->right = successor;
 	}
-/*	printf("past successor stuff\n");*/
 	if (todel == root)
 	{
 		free(todel);
@@ -56,6 +74,49 @@ bst_t *bst_remove(bst_t *root, int value)
 	}
 	free(todel);
 	return (root);
+}
+/**
+* remove_onekid - removes node with one child
+* Return: the node that took it's place
+* @todel: the node to remove
+*/
+bst_t *remove_onekid(bst_t *todel)
+{
+	bst_t *replacement = NULL;
+
+	printf("into remove onkid\n");
+	if (!todel)
+		return (NULL);
+	printf("todel not null\n");
+	if (todel->right)
+	{
+		printf("todel has a right\n");
+		replacement = todel->right;
+		todel->right->parent = todel->parent;
+		if (todel->parent && todel->parent->left == todel)
+			todel->parent->left = todel->right;
+		if (todel->parent && todel->parent->right == todel)
+			todel->parent->right = todel->right;
+	}
+	else if (todel->left)
+	{
+		printf("todel has a left");
+		replacement = todel->left;
+		todel->left->parent = todel->parent;
+		if (todel->parent && todel->parent->left == todel)
+			todel->parent->left = todel->left;
+		if (todel->parent && todel->parent->right == todel)
+			todel->parent->right = todel->left;
+	}
+	else
+	{
+		if (todel->parent && todel->parent->left == todel)
+			todel->parent->left = NULL;
+		if (todel->parent && todel->parent->right == todel)
+			todel->parent->right = NULL;
+	}
+	free(todel);
+	return (replacement);
 }
 /**
 * twokids - performs deletion if the node has two kids
@@ -66,8 +127,10 @@ bst_t *bst_remove(bst_t *root, int value)
 */
 bst_t *twokids(bst_t *root, bst_t *todel, bst_t *successor)
 {
+	printf("into twokids todel: %i successor: %i\n", todel->n, successor->n);
 	if (successor)
 	{
+		printf("into the successor if\n");
 		successor->parent->left = successor->right;
 		successor->right = successor->parent;
 		successor->parent = todel->parent;
@@ -79,9 +142,12 @@ bst_t *twokids(bst_t *root, bst_t *todel, bst_t *successor)
 				successor->parent->right = successor;
 		}
 		successor->left = todel->left;
-		successor->left->parent = successor;
-		successor->right->parent = successor;
+		if (successor->left)
+			successor->left->parent = successor;
+		if (successor->right)
+			successor->right->parent = successor;
 	}
+	printf("ended successor\n");
 	if (todel == root)
 	{
 		free(todel);
