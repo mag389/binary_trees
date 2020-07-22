@@ -2,7 +2,7 @@
 size_t binary_tree_height(const binary_tree_t *tree);
 /**
 * binary_tree_balance - finds balance of the binary tree
-* Return: the int balance 
+* Return: the int balance
 * @tree: the root node to test balance of
 */
 int binary_tree_balance(const binary_tree_t *tree)
