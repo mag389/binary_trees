@@ -10,17 +10,17 @@ bst_t *bst_remove(bst_t *root, int value)
 {
 	bst_t *todel, *successor;
 
-	printf("into the function\n");
+/*	printf("into the function\n");*/
 	if (!root)
 		return (NULL);
-	printf("past root nullchekc\n");
+/*	printf("past root nullchekc\n");*/
 	todel = bst_search(root, value);
 	if (!todel)
 		return (NULL);
-	printf("past nullchecks\n");
+/*	printf("past nullchecks\n");*/
 	if (!(todel->right) && !(todel->left))
 	{
-		printf("into oduble null if\n");
+/*		printf("into oduble null if\n");*/
 		if (todel->parent && todel->parent->right == todel)
 			todel->parent->right = NULL;
 		if (todel->parent && todel->parent->left == todel)
@@ -33,16 +33,16 @@ bst_t *bst_remove(bst_t *root, int value)
 		free(todel);
 		return (root);
 	}
-	printf("past the no child if\n");
+/*	printf("past the no child if\n");*/
 	if (todel->right && todel->left)
 	{
 		successor = io_successor(todel->right);
-		printf("print successor: %i\n", successor->n);
+/*		printf("print successor: %i\n", successor->n);*/
 		binary_tree_print(successor);
 		todel->n = successor->n;
 		if (root == todel)
 		{
-			printf("root is todel\n");
+/*			printf("root is todel\n");*/
 			remove_onekid(successor);
 			return (root);
 		}
@@ -84,13 +84,13 @@ bst_t *remove_onekid(bst_t *todel)
 {
 	bst_t *replacement = NULL;
 
-	printf("into remove onkid\n");
+/*	printf("into remove onkid\n");*/
 	if (!todel)
 		return (NULL);
-	printf("todel not null\n");
+/*	printf("todel not null\n");*/
 	if (todel->right)
 	{
-		printf("todel has a right\n");
+/*		printf("todel has a right\n");*/
 		replacement = todel->right;
 		todel->right->parent = todel->parent;
 		if (todel->parent && todel->parent->left == todel)
@@ -100,7 +100,7 @@ bst_t *remove_onekid(bst_t *todel)
 	}
 	else if (todel->left)
 	{
-		printf("todel has a left");
+/*		printf("todel has a left");*/
 		replacement = todel->left;
 		todel->left->parent = todel->parent;
 		if (todel->parent && todel->parent->left == todel)
