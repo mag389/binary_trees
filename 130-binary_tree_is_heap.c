@@ -19,9 +19,9 @@ int binary_tree_is_heap(const binary_tree_t *tree)
 		return (0);
 	if (min_height(tree->left) < binary_tree_height(tree->right))
 		return (0);
-	if (tree->left && tree->left->n > tree->n)
+	if (tree->left && tree->left->n >= tree->n)
 		return (0);
-	if (tree->right && tree->right->n > tree->n)
+	if (tree->right && tree->right->n >= tree->n)
 		return (0);
 	return (binary_tree_is_heap(tree->left) && binary_tree_is_heap(tree->right));
 }
