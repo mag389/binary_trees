@@ -63,7 +63,6 @@ avl_t *rebalance(avl_t *newt)
 		if (newt->n > newt->parent->n)
 		{
 			newt->parent->parent->left = binary_tree_rotate_left(newt->parent);
-			binary_tree_print(newt->parent);
 			binary_tree_rotate_right(newt->parent);
 			return (NULL);
 		}
