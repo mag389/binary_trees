@@ -14,24 +14,23 @@ int binary_tree_is_heap(const binary_tree_t *tree)
 
 	nodes = binary_tree_size(tree);
 	if (completeness(tree, index, nodes) == 0)
-		return (0);	
+		return (0);
 	if (!(tree->left) && !(tree->right))
 		return (1);
 	if (tree->right == NULL)
 		return (tree->n > tree->left->n);
-	else
-	{
-		if (tree->n < tree->left->n)
-			return (0);
-		if (tree->n < tree->right->n)
-			return (0);
-		return (binary_tree_is_heap(tree->left) && binary_tree_is_heap(tree->right));
-	}
+	if (tree->n < tree->left->n)
+		return (0);
+	if (tree->n < tree->right->n)
+		return (0);
+	return (binary_tree_is_heap(tree->left) && binary_tree_is_heap(tree->right));
 }
 /**
-* binary_tree_is_complete - tests completeness
+* completeness - tests completeness
 * Return: 1 for complete else 0
 * @tree: the root node of the tree
+* @index: the index the node should be at
+* @nodes: total number of nodes
 */
 int completeness(const binary_tree_t *tree, int index, int nodes)
 {
