@@ -31,12 +31,12 @@ bst_t *avl_remove(bst_t *root, int value)
 			successor = io_successor(todel->right);
 			root->n = successor->n;
 			remove_onekid(successor);
-			return (root);
+/*			return (root);*/
 		}
 		else
 		{
 			root = remove_onekid(root);
-			return (root);
+/*			return (root);*/
 		}
 	}
 	/* rebalance */
