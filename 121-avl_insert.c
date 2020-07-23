@@ -8,9 +8,8 @@
 */
 avl_t *avl_insert(avl_t **tree, int value)
 {
-	avl_t *newt, *temp, *temp2, *ncheck;
+	avl_t *newt, *temp, *ncheck;
 
-/*	printf("tying to insert %i\n", value);*/
 	if (!tree)
 		return (NULL);
 	if (!(*tree))
@@ -33,42 +32,32 @@ avl_t *avl_insert(avl_t **tree, int value)
 		else
 		{
 			temp = avl_insert((&(*tree)->left), value);
-			while ((*tree)->parent != NULL && !ncheck)
+			while (*tree && (*tree)->parent != NULL && !ncheck)
 				*tree = (*tree)->parent;
 			return (temp);
 		}
 	}
-	else if ((*tree)->n < value)
+	if ((*tree)->right == NULL)
 	{
-		if ((*tree)->right == NULL)
-		{
-			(*tree)->right = binary_tree_node(*tree, value);
-			newt = (*tree)->right;
-			temp = rebalance((*tree)->right);
-			return (newt);
-		}
-		else
-		{
-			temp = avl_insert((&(*tree)->right), value);
-			temp2 = temp;
-			while (temp2 && temp2->parent)
-			{
-/*				printf("++++++++++++++++++++++++++++++\n");*/
-/*				binary_tree_print(temp2);*/
-				temp2 = temp2->parent;
-/*				printf("===============================\n");*/
-			}
-/*
-*			if (temp2 && *tree && !(temp2->parent) && (*tree)->parent && !ncheck)
-*				*tree = temp2;
-*/
-			while ((*tree)->parent != NULL && !ncheck)
-				*tree = (*tree)->parent;
-			return (temp);
-		}
+/*		printf("lets check the other side to be safe\n");*/
+		(*tree)->right = binary_tree_node(*tree, value);
+		newt = (*tree)->right;
+/*		printf("here's the other balance\n");*/
+		temp = rebalance((*tree)->right);
+/*		printf("not after a diff balance\n");*/
+		return (newt);
 	}
-	(void) temp;
-	return (NULL);
+	else
+	{
+		temp = avl_insert((&(*tree)->right), value);
+/*		printf("and the other tree check\n");*/
+/*                        if (!(*tree))*/
+/*                                printf("TREE IS NULL THIS TIME\n");*/
+		while (*tree && (*tree)->parent != NULL && !ncheck)
+			*tree = (*tree)->parent;
+/*		printf("not that either\n");*/
+		return (temp);
+	}
 }
 
 /**
