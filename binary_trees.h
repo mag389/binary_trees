@@ -69,5 +69,6 @@ bst_t *twokids(bst_t *root, bst_t *todel, bst_t *successor);
 int binary_tree_is_avl(const binary_tree_t *tree);
 avl_t *avl_insert(avl_t **tree, int value);
 avl_t *rebalance(avl_t *newt);
+avl_t *array_to_avl(int *array, size_t size);
 
 #endif
