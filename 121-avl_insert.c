@@ -39,25 +39,15 @@ avl_t *avl_insert(avl_t **tree, int value)
 	}
 	if ((*tree)->right == NULL)
 	{
-/*		printf("lets check the other side to be safe\n");*/
 		(*tree)->right = binary_tree_node(*tree, value);
 		newt = (*tree)->right;
-/*		printf("here's the other balance\n");*/
 		temp = rebalance((*tree)->right);
-/*		printf("not after a diff balance\n");*/
 		return (newt);
 	}
-	else
-	{
-		temp = avl_insert((&(*tree)->right), value);
-/*		printf("and the other tree check\n");*/
-/*                        if (!(*tree))*/
-/*                                printf("TREE IS NULL THIS TIME\n");*/
-		while (*tree && (*tree)->parent != NULL && !ncheck)
-			*tree = (*tree)->parent;
-/*		printf("not that either\n");*/
-		return (temp);
-	}
+	temp = avl_insert((&(*tree)->right), value);
+	while (*tree && (*tree)->parent != NULL && !ncheck)
+		*tree = (*tree)->parent;
+	return (temp);
 }
 
 /**
