@@ -8,8 +8,9 @@
 */
 avl_t *avl_insert(avl_t **tree, int value)
 {
-	avl_t *newt;
+	avl_t *newt, *temp, *temp2, *ncheck;
 
+	printf("tying to insert %i\n", value);
 	if (!tree)
 		return (NULL);
 	if (!(*tree))
@@ -17,30 +18,90 @@ avl_t *avl_insert(avl_t **tree, int value)
 		*tree = binary_tree_node(NULL, value);
 		return (*tree);
 	}
+	ncheck = (*tree)->parent;
+	if ((*tree)->n == value)
+		return (*tree);
 	if ((*tree)->n > value)
 	{
 		if (!((*tree)->left))
 		{
 			(*tree)->left = binary_tree_node(*tree, value);
 			newt = (*tree)->left;
-			rebalance((*tree)->left);
+			temp = rebalance((*tree)->left);
+/*			if (temp)
+				printf("temp issa %i\n", temp->n);
+			else
+				printf("apparently tmep is null for the rebalance here\n");
+			if (temp && !(temp->parent))
+				printf("##########################\n");
+			while ((*tree)->parent && 0)
+				*tree = (*tree)->parent;
+			if (temp && temp->parent == NULL && (*tree)->parent == NULL)
+				*tree = temp;*/
 			return (newt);
 		}
 		else
-			return (avl_insert((&(*tree)->left), value));
+		{
+			temp = avl_insert((&(*tree)->left), value);
+/*			if (temp && !(temp->parent) && (*tree)->parent == NULL)
+				*tree = temp;*/
+			return (temp);
+		}
 	}
 	else if ((*tree)->n < value)
 	{
 		if ((*tree)->right == NULL)
 		{
+			printf("is 514 here\n");
 			(*tree)->right = binary_tree_node(*tree, value);
 			newt = (*tree)->right;
-			rebalance((*tree)->right);
+			temp = rebalance((*tree)->right);
+/*                      if (temp)
+                                printf("temp issa %i\n", temp->n);
+                        else
+                                printf("apparently tmep is null for the rebalance here\n");
+                        if (temp && !(temp->parent))
+			{
+                                printf("********************************\n");
+				printf("tree is %i\n", (*tree)->n);
+				while ((*tree)->parent)
+					*tree = (*tree)->parent;
+			}
+			if (temp && temp->parent == NULL && (*tree)->parent == NULL)
+				*tree = temp;
+*/
 			return (newt);
 		}
 		else
-			return (avl_insert((&(*tree)->right), value));
+		{
+			printf("we're in the else!!!!!!!\n");
+			temp = avl_insert((&(*tree)->right), value);
+			printf("I think here's where we need to change\n");
+			temp2 = temp;
+			while (temp2 && temp2->parent)
+			{
+				printf("++++++++++++++++++++++++++++++\n");
+				binary_tree_print(temp2);
+				temp2 = temp2->parent;
+				printf("===============================\n");
+			}
+			printf("is the where it segafults\n");
+			if (temp2 && *tree && !(temp2->parent) && (*tree)->parent && !ncheck)
+				*tree = temp2;
+			printf("nope %i\n", temp2->n);
+			
+/*			if (temp && !(temp->parent) && !((*tree)->parent))
+			{
+				*tree = temp;
+				printf("actually changed in the other section\n");
+			}
+*/
+/*			while ((*tree)->parent != NULL)
+				*tree = (*tree)->parent;*/
+			return (temp);
+		}
 	}
+	(void) temp;
 	return (NULL);
 }
 
@@ -52,9 +113,12 @@ avl_t *avl_insert(avl_t **tree, int value)
 avl_t *rebalance(avl_t *newt)
 {
 	int balance;
+	avl_t *temp;
 
 	if (!newt || !(newt->parent) || !(newt->parent->parent))
 		return (NULL);
+	printf("--------------------------------------------\n");
+	binary_tree_print(newt->parent->parent);
 	balance = binary_tree_balance(newt->parent->parent);
 	if (balance <= 1 && balance >= -1)
 		return (rebalance(newt->parent));
@@ -63,21 +127,21 @@ avl_t *rebalance(avl_t *newt)
 		if (newt->n > newt->parent->n)
 		{
 			newt->parent->parent->left = binary_tree_rotate_left(newt->parent);
-			binary_tree_rotate_right(newt->parent);
-			return (NULL);
+			temp = binary_tree_rotate_right(newt->parent);
+			return (temp);
 		}
-		binary_tree_rotate_right(newt->parent->parent);
-		return (NULL);
+		temp = binary_tree_rotate_right(newt->parent->parent);
+		return (temp);
 	}
 	else
 	{
 		if (newt->n < newt->parent->n)
 		{
 			binary_tree_rotate_right(newt->parent);
-			binary_tree_rotate_left(newt->parent);
-			return (NULL);
+			temp = binary_tree_rotate_left(newt->parent);
+			return (temp);
 		}
-		binary_tree_rotate_left(newt->parent->parent);
-		return (NULL);
+		temp = binary_tree_rotate_left(newt->parent->parent);
+		return (temp);
 	}
 }
