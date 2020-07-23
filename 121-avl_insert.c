@@ -20,7 +20,7 @@ avl_t *avl_insert(avl_t **tree, int value)
 	}
 	ncheck = (*tree)->parent;
 	if ((*tree)->n == value)
-		return (*tree);
+		return (NULL);
 	if ((*tree)->n > value)
 	{
 		if (!((*tree)->left))
