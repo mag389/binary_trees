@@ -1,7 +1,7 @@
 #include "binary_trees.h"
 bst_t *remove_onekid(bst_t *todel);
 /**
-* bst_remove - removes a node value from the tree
+* avl_remove - removes a node value from the tree
 * Return: pointer to new root node of the tree
 * @root: the root of the tree to remove from
 * @value: the value to check for/remove
@@ -24,34 +24,29 @@ bst_t *avl_remove(bst_t *root, int value)
 		if (!(todel->right) && !(todel->left))
 		{
 			root = remove_onekid(root);
-			if (!root)
-				printf("root is null when no kids");
-			else
-				printf("=======whoaaaaaaaaa====\n");
-			return(root);
+			return (root);
 		}
 		else if (todel->right && todel->left)
-		{/* two kids*/
+		{
 			successor = io_successor(todel->right);
-			printf("successor %i\n", successor->n);
 			root->n = successor->n;
 			remove_onekid(successor);
-			return(root);
+			return (root);
 		}
-		else/* one kid*/
+		else
 		{
-			printf("into the else\n");
 			root = remove_onekid(root);
 			return (root);
 		}
 	}
+	/* rebalance */
 	balance = binary_tree_balance(root);
 	if (balance > 1 && binary_tree_balance(root->left) >= 0)
 		return (binary_tree_rotate_right(root));
 	if (balance > 1 && binary_tree_balance(root->left) < 0)
 	{
 		root->left = binary_tree_rotate_left(root->left);
-		return binary_tree_rotate_right(root);
+		return (binary_tree_rotate_right(root));
 	}
 	if (balance < -1 && binary_tree_balance(root->right) <= 0)
 		return (binary_tree_rotate_left(root));
@@ -60,16 +55,8 @@ bst_t *avl_remove(bst_t *root, int value)
 		root->right = binary_tree_rotate_right(root->right);
 		return (binary_tree_rotate_left(root));
 	}
-
-	printf("makes it out of the statement entirely\n");
-	/* rebalance */
 	if (root)
-	{
-		printf("the root ends on %i\n", root->n);
 		return (root);
-	}
-	else
-		printf("the root ends null\n");
 	return (NULL);
 }
 /**
