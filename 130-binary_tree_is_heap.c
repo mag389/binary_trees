@@ -1,5 +1,5 @@
 #include "binary_trees.h"
-
+int completeness(const binary_tree_t *tree, int index, int nodes);
 /**
 * binary_tree_is_heap - deterines if the tree is a heap
 * Return: 1 if it is a valid max binary heap, else 0
@@ -7,42 +7,51 @@
 */
 int binary_tree_is_heap(const binary_tree_t *tree)
 {
+	int nodes, index = 0;
+
 	if (!tree)
 		return (0);
-	if (!(tree->right) && !(tree->left))
+
+	nodes = binary_tree_size(tree);
+	if (completeness(tree, index, nodes) == 0)
+		return (0);	
+	if (!(tree->left) && !(tree->right))
 		return (1);
-	if (binary_tree_is_complete(tree) == 0)
-		return (0);
-	if (!(tree->left) && tree->right)
-		return (0);
-	if (binary_tree_height(tree->left) < binary_tree_height(tree->right))
-		return (0);
-	if (tree->left && tree->left->n >= tree->n)
-		return (0);
-	if (tree->right && tree->right->n >= tree->n)
-		return (0);
-	return (binary_tree_is_heap(tree->left) && binary_tree_is_heap(tree->right));
+	if (tree->right == NULL)
+		return (tree->n > tree->left->n);
+	else
+	{
+		if (tree->n < tree->left->n)
+			return (0);
+		if (tree->n < tree->right->n)
+			return (0);
+		return (binary_tree_is_heap(tree->left) && binary_tree_is_heap(tree->right));
+	}
 }
 /**
 * binary_tree_is_complete - tests completeness
 * Return: 1 for complete else 0
 * @tree: the root node of the tree
 */
-int binary_tree_is_complete(const binary_tree_t *tree)
+int completeness(const binary_tree_t *tree, int index, int nodes)
 {
-	size_t max_height, i;
-	int hitleaf = 0;
-
+	if (!tree)
+		return (1);
+	if (index >= nodes)
+		return (0);
+	return (completeness(tree->left, 2 * index + 1, nodes) &&
+		completeness(tree->right, 2 * index + 2, nodes));
+}
+/**
+* binary_tree_size - returns size of the binary tree
+* Return: size_t size of the tree
+* @tree: pointer to root node of the tree to be measured
+*/
+size_t binary_tree_size(const binary_tree_t *tree)
+{
 	if (!tree)
 		return (0);
-	max_height = binary_tree_height(tree);
-	for (i = 0; i <= max_height; i++)
-	{
-		comp_check(tree, &hitleaf, i);
-		if (hitleaf == 2)
-			return (0);
-	}
-	return (1);
+	return (1 + binary_tree_size(tree->left) + binary_tree_size(tree->right));
 }
 /**
 * comp_check - checks if the current node can be in a complete tree
