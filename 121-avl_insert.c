@@ -55,31 +55,14 @@ avl_t *rebalance(avl_t *newt)
 
 	if (!newt || !(newt->parent) || !(newt->parent->parent))
 		return (NULL);
-/*	binary_tree_print(newt);*/
-/*	binary_tree_print(newt->parent->parent);*/
 	balance = binary_tree_balance(newt->parent->parent);
-/*	printf("balance of node %i is %i\n", newt->n, balance);*/
 	if (balance <= 1 && balance >= -1)
 		return (rebalance(newt->parent));
-	/*else rebalance at grandparent */
 	if (balance > 1)
 	{
-		printf("first if correct\n");
 		if (newt->n > newt->parent->n)
 		{
-/*
-*			printf("1: rotate around %i %i\n",
-*			 newt->parent->n, newt->parent->parent->n);
-*		printf("%i %i %i %i %i \n", newt->n, newt->parent->n,
-*			newt->parent->parent->n,
-*			newt->parent->parent->left->n,
-*			newt->parent->parent->left->right->n);
-*/
 			newt->parent->parent->left = binary_tree_rotate_left(newt->parent);
-/*
-*		printf("%i %i %i %i %i \n", newt->n, newt->parent->n, newt->parent->parent->n,
-*                       newt->parent->parent->left->n, newt->parent->parent->right->left->n);
-*/
 			binary_tree_print(newt->parent);
 			binary_tree_rotate_right(newt->parent);
 			return (NULL);
@@ -91,7 +74,6 @@ avl_t *rebalance(avl_t *newt)
 	{
 		if (newt->n < newt->parent->n)
 		{
-/*			printf("2: rotate around %i %i\n", newt->parent->n, newt->parent->parent->n);*/
 			binary_tree_rotate_right(newt->parent);
 			binary_tree_rotate_left(newt->parent);
 			return (NULL);
