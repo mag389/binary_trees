@@ -1,7 +1,5 @@
 #include "binary_trees.h"
-int completeness(const binary_tree_t *tree, int index, int nodes);
-heap_t *last_levelorder(heap_t *root, int index, int size);
-heap_t *rebuild(heap_t *root);
+
 /**
 * heap_extract - extracts the top value from the heap
 * Return: the value if extracted else 0
@@ -17,12 +15,7 @@ int heap_extract(heap_t **root)
 		return (0);
 	size = binary_tree_size(*root);
 	last = last_levelorder(*root, 0, size - 1);
-/*
-*	if (last)
-*		printf("the last exists and is %i\n", last->n);
-*	else
-*		printf("------------------------------\n");
-*/
+
 	temp = last->n;
 	last->n = (*root)->n;
 	(*root)->n = temp;
@@ -34,46 +27,8 @@ int heap_extract(heap_t **root)
 	free(last);
 	rebuild(*root);
 	return (temp);
-/*
-*	if ((!(*root)->left) && !((*root)->right))
-*	{
-*		ret = (*root)->n;
-*		if ((*root)->parent->left == (*root))
-*			(*root)->parent->left = NULL;
-*		else
-*			(*root)->parent->right = NULL;
-*		free(*root);
-*		return (ret);
-*	}
-*/
-	/* else return the recursive call on the child after swiching values*/
-/*
-*	sizeleft = binary_tree_size((*root)->left);
-*	sizeright = binary_tree_size((*root)->right);
-*	lf = binary_tree_is_full((*root)->left);
-*	rf = binary_tree_is_full((*root)->right);
-*	printf("sizel: %i  - sizer: %i - lf: %i - rf %i\n",
-*	 sizeleft, sizeright, lf, rf);
-*	if (sizeleft == sizeright || (sizeleft != sizeright && lf == 1 && rf == 1))
-*	{
-*/
-/*		binary_tree_print(*root);*/
-/*
-*		temp = (*root)->n;
-*		(*root)->n = (*root)->right->n;
-*		(*root)->right->n = temp;
-*		printf("____________\n");
-*		return (heap_extract( &((*root)->right) ));
-*	}
-*	else
-*	{
-*		temp = (*root)->n;
-*		(*root)->n = (*root)->left->n;
-*		(*root)->left->n = temp;
-*		return (heap_extract(&((*root)->left)));
-*	}
-*/
 }
+
 /**
 * last_levelorder - return last node in level order
 * Return: heap_t
@@ -87,7 +42,6 @@ heap_t *last_levelorder(heap_t *root, int index, int size)
 
 	if (!root)
 		return (NULL);
-/*	printf("in the last level %i, %i\n", index, size);*/
 	if (index > size)
 		return (NULL);
 	if (index == size)
@@ -113,15 +67,12 @@ heap_t *rebuild(heap_t *root)
 		return (NULL);
 	if (!(root->left) && !(root->right))
 		return (NULL);
-	if (root->left && !(root->right))
+	if (root->left && !(root->right) && root->left->n > root->n)
 	{
-		if (root->left->n > root->n)
-		{
-			temp = root->left->n;
-			root->left->n = root->n;
-			root->n = temp;
-			rebuild(root->left);
-		}
+		temp = root->left->n;
+		root->left->n = root->n;
+		root->n = temp;
+		rebuild(root->left);
 	}
 	else if (root->right && !(root->left))
 	{
