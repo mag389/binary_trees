@@ -15,6 +15,9 @@ Then run that executable file from a terminal. For example
 
 > ./9-height
 
+Additionally there are several files (such as 115-0) that correspond to the time complexities of 
+certain actions. names inserting a node, removing a node, and searching for a node.
+
 ## Author
 Michael George - [linkedin](https://www.linkedin.com/in/mageorge/) - [github](https://github.com/mag389)
 
